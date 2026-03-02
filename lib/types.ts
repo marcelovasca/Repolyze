@@ -140,6 +140,20 @@ export interface DataFlowEdge {
   dataType?: string;
 }
 
+export interface DependencyNode {
+  id: string;
+  label: string;
+  group: string;
+  description?: string;
+}
+
+export interface DependencyEdge {
+  from: string;
+  to: string;
+  label?: string;
+  type?: "direct" | "indirect";
+}
+
 export interface KeyFolder {
   name: string;
   description: string;
@@ -180,6 +194,10 @@ export interface AnalysisResult {
   dataFlow?: {
     nodes: DataFlowNode[];
     edges: DataFlowEdge[];
+  };
+  dependencyGraph?: {
+    nodes: DependencyNode[];
+    edges: DependencyEdge[];
   };
   diagrams?: DiagramsData;
   pullRequests?: Array<{

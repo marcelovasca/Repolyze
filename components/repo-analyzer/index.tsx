@@ -10,6 +10,7 @@ import { ArchitectureDiagram } from "@/components/architecture-diagram";
 import { DataFlowDiagram } from "@/components/data-flow-diagram";
 import { CoreFeaturesPanel } from "@/components/core-features-panel";
 import { KeyConceptsPanel } from "@/components/key-concepts-panel";
+import { DependencyGraph } from "@/components/dependency-graph";
 import { RefactorsPanel } from "@/components/refactors-panel";
 import { AutomationsPanel } from "@/components/automations-panel";
 import { IssuesPanel, SuggestedIssue } from "@/components/issues-panel";
@@ -397,6 +398,34 @@ ${insight.affectedFiles.map((f) => `- \`${f}\``).join("\n")}`
                   )}
                 </div>
               </motion.section>
+
+              {/* Dependency Graph */}
+              {result.dependencyGraph?.nodes &&
+                result.dependencyGraph.nodes.length > 0 && (
+                  <motion.section
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.22 }}
+                    className="w-full"
+                  >
+                    <SectionHeader
+                      title="Dependency Map"
+                      icon={WorkflowSquare10Icon}
+                    />
+                    <div className="mt-4">
+                      <FeatureGate
+                        tier={tier}
+                        feature="dataFlow"
+                        featureLabel="Interactive dependency graph between components"
+                      >
+                        <DependencyGraph
+                          nodes={result.dependencyGraph.nodes}
+                          edges={result.dependencyGraph.edges || []}
+                        />
+                      </FeatureGate>
+                    </div>
+                  </motion.section>
+                )}
 
               {/* Refactors, Automations & Issues Tabs */}
               <motion.section

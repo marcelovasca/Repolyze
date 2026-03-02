@@ -131,7 +131,16 @@ You must produce a deep, structured analysis. Do NOT just summarize the README o
 - Suggestions: What would a senior developer do to improve this codebase? Include rationale.
 - Warnings: What are active risks (security, performance, maintainability)?
 
-### 11. Diagrams
+### 11. Dependency Graph (CRITICAL — used for interactive visual canvas)
+- Map out file-level and module-level dependencies as a directed graph.
+- Each node represents a key file, module, or component (NOT every file — pick 10-20 most important ones).
+- Each edge represents an import, usage, or dependency relationship.
+- Nodes have: id, label (short display name like "AuthProvider" or "api/route.ts"), group (one of: component, page, api, hook, lib, config, context, store, service, model, middleware), description.
+- Edges have: from (source id), to (target id), label (relationship like "imports", "uses", "extends", "renders"), type ("direct" for imports, "indirect" for implicit dependencies).
+- Focus on the actual import/usage graph visible in the source files.
+- Group related files sensibly — don't just list random files.
+
+### 12. Diagrams
 - Architecture diagram showing subsystems and their connections.
 - Data flow diagram showing how data moves through the system.
 - Both must be valid Mermaid.js syntax and reflect the ACTUAL architecture, not generic templates.
@@ -211,6 +220,17 @@ Return ONLY valid JSON — no markdown, no commentary, no code fences outside JS
       "files": ["src/core/factory.ts"]
     }
   ],
+  "dependencyGraph": {
+    "nodes": [
+      { "id": "dep-1", "label": "AuthProvider", "group": "context", "description": "Manages authentication state and session" },
+      { "id": "dep-2", "label": "api/auth", "group": "api", "description": "Auth endpoint handling login/logout" },
+      { "id": "dep-3", "label": "useAuth", "group": "hook", "description": "Hook for consuming auth context" }
+    ],
+    "edges": [
+      { "from": "dep-3", "to": "dep-1", "label": "uses", "type": "direct" },
+      { "from": "dep-1", "to": "dep-2", "label": "calls", "type": "direct" }
+    ]
+  },
   "diagrams": {
     "architecture": {
       "type": "flowchart",
