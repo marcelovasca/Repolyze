@@ -65,6 +65,28 @@ export interface AIInsight {
   description: string;
   priority: "low" | "medium" | "high" | "critical";
   affectedFiles?: string[];
+  codeReference?: string;
+}
+
+export interface CoreFeature {
+  name: string;
+  description: string;
+  implementation: string;
+  keyFiles: string[];
+  patterns?: string[];
+}
+
+export interface KeyConcept {
+  name: string;
+  description: string;
+  implementation: string;
+  relatedFiles: string[];
+}
+
+export interface DesignPatternInfo {
+  name: string;
+  description: string;
+  files: string[];
 }
 
 export interface Refactor {
@@ -149,6 +171,9 @@ export interface AnalysisResult {
   keyFolders?: KeyFolder[];
   scores?: ScoreMetrics;
   insights?: AIInsight[];
+  coreFeatures?: CoreFeature[];
+  keyConcepts?: KeyConcept[];
+  designPatterns?: DesignPatternInfo[];
   refactors?: Refactor[];
   automations?: Automation[];
   architecture?: ArchitectureComponent[];
