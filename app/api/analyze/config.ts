@@ -1,7 +1,8 @@
-import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import { createOpenAI } from "@ai-sdk/openai";
 import { EnvConfig } from "./types";
 
-export const MODEL_ID = "arcee-ai/trinity-large-preview:free";
+// Using Llama 3.3 70B on DeepInfra
+export const MODEL_ID = "meta-llama/Llama-3.3-70B-Instruct";
 
 export const AI_CONFIG = {
   temperature: 0.7,
@@ -14,15 +15,15 @@ export const RATE_LIMIT = {
 } as const;
 
 function validateEnvVariables(): EnvConfig {
-  const openRouterApiKey = process.env.OPENROUTER_API_KEY;
+  const deepinfraApiKey = process.env.DEEPINFRA_API_KEY;
   const githubToken = process.env.GITHUB_TOKEN;
 
   const errors: string[] = [];
 
-  if (!openRouterApiKey) {
-    errors.push("OPENROUTER_API_KEY is required but not configured");
-  } else if (openRouterApiKey.length < 20) {
-    errors.push("OPENROUTER_API_KEY appears to be invalid (too short)");
+  if (!deepinfraApiKey) {
+    errors.push("DEEPINFRA_API_KEY is required but not configured");
+  } else if (deepinfraApiKey.length < 20) {
+    errors.push("DEEPINFRA_API_KEY appears to be invalid (too short)");
   }
 
   if (!githubToken) {
@@ -42,7 +43,7 @@ function validateEnvVariables(): EnvConfig {
   console.log("✅ Environment variables validated successfully");
 
   return {
-    OPENROUTER_API_KEY: openRouterApiKey!,
+    OPENROUTER_API_KEY: deepinfraApiKey!,
     GITHUB_TOKEN: githubToken,
   };
 }
@@ -52,8 +53,6 @@ let envConfig: EnvConfig;
 try {
   envConfig = validateEnvVariables();
 } catch (error) {
-  // In development, log the error but don't crash
-  // In production, this will prevent the server from starting with invalid config
   if (process.env.NODE_ENV === "production") {
     throw error;
   }
@@ -66,14 +65,17 @@ try {
 
 export { envConfig };
 
-export function getOpenRouterClient() {
+export function getDeepInfraClient() {
   if (!envConfig.OPENROUTER_API_KEY) {
     throw new Error(
-      "OPENROUTER_API_KEY environment variable is not configured"
+      "DEEPINFRA_API_KEY environment variable is not configured"
     );
   }
 
-  return createOpenRouter({ apiKey: envConfig.OPENROUTER_API_KEY });
+  return createOpenAI({
+    apiKey: envConfig.OPENROUTER_API_KEY,
+    baseURL: "https://api.deepinfra.com/v1/openai",
+  });
 }
 
 export function isConfigured(): boolean {

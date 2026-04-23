@@ -8,7 +8,7 @@ import {
   createCompactTreeString,
 } from "@/lib/github";
 import {
-  getOpenRouterClient,
+  getDeepInfraClient,
   isConfigured,
   hasGitHubToken,
   MODEL_ID,
@@ -157,8 +157,8 @@ export async function POST(request: Request) {
       }
     }
 
-    const openrouter = getOpenRouterClient();
-    const model = openrouter.chat(MODEL_ID);
+    const deepinfra = getDeepInfraClient();
+    const model = deepinfra.chat(MODEL_ID);
 
     // Parallel fetch (all cached individually too)
     const [tree, branches] = await Promise.all([
@@ -296,7 +296,7 @@ export async function GET() {
     status: isConfigured() ? "ok" : "misconfigured",
     timestamp: new Date().toISOString(),
     services: {
-      openrouter: isConfigured() ? "configured" : "missing",
+      deepinfra: isConfigured() ? "configured" : "missing",
       github: hasGitHubToken() ? "configured" : "optional",
     },
   };
