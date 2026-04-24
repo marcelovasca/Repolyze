@@ -61,39 +61,15 @@ export async function POST(request: Request) {
     );
   }
 
-  // Daily tiered rate limit (DB-backed) — anon: 1/day, free: 3/day, pro: 44/day
-  let dailyLimit: Awaited<ReturnType<typeof checkAnalysisRateLimit>>;
-  try {
-    dailyLimit = await checkAnalysisRateLimit(request, clientIP);
-  } catch (err) {
-    console.error("Rate limit DB check failed, allowing request:", err);
-    dailyLimit = {
+    // Daily tiered rate limit (BYPASSED - Everyone is PRO)
+    let dailyLimit = {
       allowed: true,
-      remaining: 1,
-      limit: 1,
-      isAuthenticated: false,
-      userId: null,
-      tier: "anonymous",
+      remaining: 9999,
+      limit: 9999,
+      isAuthenticated: true,
+      userId: "unrestricted-user",
+      tier: "pro" as const,
     };
-  }
-
-  if (!dailyLimit.allowed) {
-    const upgradeMsg = dailyLimit.tier === "anonymous"
-      ? "Daily limit reached. Sign in to get more analyses."
-      : dailyLimit.tier === "free"
-        ? "Daily limit reached. Upgrade to Pro for 44 analyses per day."
-        : "Daily analysis limit reached.";
-    return Response.json(
-      {
-        error: upgradeMsg,
-        code: "DAILY_LIMIT_REACHED",
-        limit: dailyLimit.limit,
-        remaining: 0,
-        tier: dailyLimit.tier,
-      },
-      { status: 429 },
-    );
-  }
 
   try {
     const contentLength = request.headers.get("content-length");

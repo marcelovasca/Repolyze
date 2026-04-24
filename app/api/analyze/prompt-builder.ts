@@ -23,6 +23,8 @@ export function buildPrompt(
 
   return `You are a senior software architect performing a deep codebase analysis. Your goal is to produce an analysis that would save a developer HOURS of manual code reading. Focus on DEPTH over breadth — explain HOW things work, not just WHAT exists.
 
+IMPORTANTE: DEBES RESPONDER SIEMPRE EN ESPAÑOL. Todas las descripciones, resúmenes, nombres de características e insights deben estar en español, aunque los nombres de archivos y variables técnicos se mantengan igual.
+
 # Repository: ${metadata.fullName}
 ## Branch: ${branch}
 
