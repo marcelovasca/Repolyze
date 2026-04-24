@@ -10,8 +10,8 @@
  * Server-side environment variables (not exposed to client)
  */
 interface ServerEnv {
-  /** OpenRouter API key for AI analysis */
-  OPENROUTER_API_KEY: string;
+  /** DeepInfra API key for AI analysis */
+  DEEPINFRA_API_KEY: string;
   /** GitHub token for increased API rate limits (optional) */
   GITHUB_TOKEN?: string;
 }
@@ -31,7 +31,7 @@ interface ServerEnv {
  * @example
  * // In API route
  * const env = getServerEnv();
- * const client = createOpenRouter({ apiKey: env.OPENROUTER_API_KEY });
+ * const client = createOpenAI({ apiKey: env.DEEPINFRA_API_KEY, baseURL: "..." });
  */
 export function getServerEnv(): ServerEnv {
   // Ensure we're on the server
@@ -42,18 +42,18 @@ export function getServerEnv(): ServerEnv {
     );
   }
 
-  const openRouterKey = process.env.OPENROUTER_API_KEY;
+  const deepInfraKey = process.env.DEEPINFRA_API_KEY;
 
-  if (!openRouterKey) {
+  if (!deepInfraKey) {
     throw new Error(
-      "Missing required environment variable: OPENROUTER_API_KEY. " +
+      "Missing required environment variable: DEEPINFRA_API_KEY. " +
         "Please add it to your .env.local file."
     );
   }
 
-  if (openRouterKey.length < 20) {
+  if (deepInfraKey.length < 20) {
     throw new Error(
-      "OPENROUTER_API_KEY appears to be invalid. " +
+      "DEEPINFRA_API_KEY appears to be invalid. " +
         "Please check your API key."
     );
   }
@@ -67,7 +67,7 @@ export function getServerEnv(): ServerEnv {
   }
 
   return {
-    OPENROUTER_API_KEY: openRouterKey,
+    DEEPINFRA_API_KEY: deepInfraKey,
     GITHUB_TOKEN: process.env.GITHUB_TOKEN,
   };
 }
@@ -79,11 +79,11 @@ export function getServerEnv(): ServerEnv {
  *
  * @example
  * const status = checkServerEnv();
- * // { openrouter: true, github: false }
+ * // { deepinfra: true, github: false }
  */
-export function checkServerEnv(): { openrouter: boolean; github: boolean } {
+export function checkServerEnv(): { deepinfra: boolean; github: boolean } {
   return {
-    openrouter: !!process.env.OPENROUTER_API_KEY,
+    deepinfra: !!process.env.DEEPINFRA_API_KEY,
     github: !!process.env.GITHUB_TOKEN,
   };
 }

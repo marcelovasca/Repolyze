@@ -3,7 +3,7 @@ import { FileNode, BranchInfo } from "@/lib/types";
 import { GeneratedRefactor } from "./refactor-generator";
 
 export interface EnvConfig {
-  OPENROUTER_API_KEY: string;
+  DEEPINFRA_API_KEY: string;
   GITHUB_TOKEN: string | undefined;
 }
 
@@ -104,7 +104,7 @@ export interface HealthCheckResponse {
   status: "ok" | "misconfigured";
   timestamp: string;
   services: {
-    openrouter: "configured" | "missing";
+    deepinfra: "configured" | "missing";
     github: "configured" | "optional";
   };
 }

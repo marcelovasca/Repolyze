@@ -157,9 +157,9 @@ Create a `.env.local` file with the following:
 # Required scopes: repo, read:user
 GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
 
-# OpenRouter API Key
-# Get yours at: https://openrouter.ai/keys
-OPENROUTER_API_KEY=sk-or-xxxxxxxxxxxxxxxxxxxx
+# DeepInfra API Key
+# Get yours at: https://deepinfra.com/dash/api_keys
+DEEPINFRA_API_KEY=your-api-key-here
 
 # ===========================================
 # OPTIONAL
@@ -182,10 +182,10 @@ CACHE_TTL=3600
 3. Select scopes: `repo`, `read:user`
 4. Copy the token and add it to `.env.local`
 
-#### OpenRouter API Key
+#### DeepInfra API Key
 
-1. Go to [OpenRouter](https://openrouter.ai/)
-2. Sign up and navigate to **Settings** → **API Keys**
+1. Go to [DeepInfra](https://deepinfra.com/)
+2. Sign up and navigate to **Dashboard** → **API Keys**
 3. Create a new key and add it to `.env.local`
 
 </details>

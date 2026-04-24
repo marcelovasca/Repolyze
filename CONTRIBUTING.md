@@ -14,7 +14,7 @@ pnpm install
 
 # 3. Set up environment
 cp .env.example .env.local
-# Add your GITHUB_TOKEN and OPENROUTER_API_KEY
+# Add your GITHUB_TOKEN and DEEPINFRA_API_KEY
 
 # 4. Start development
 pnpm dev

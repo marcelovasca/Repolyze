@@ -43,7 +43,7 @@ function validateEnvVariables(): EnvConfig {
   console.log("✅ Environment variables validated successfully");
 
   return {
-    OPENROUTER_API_KEY: deepinfraApiKey!,
+    DEEPINFRA_API_KEY: deepinfraApiKey!,
     GITHUB_TOKEN: githubToken,
   };
 }
@@ -58,7 +58,7 @@ try {
   }
   console.error("Environment validation failed:", error);
   envConfig = {
-    OPENROUTER_API_KEY: "",
+    DEEPINFRA_API_KEY: "",
     GITHUB_TOKEN: undefined,
   };
 }
@@ -66,20 +66,20 @@ try {
 export { envConfig };
 
 export function getDeepInfraClient() {
-  if (!envConfig.OPENROUTER_API_KEY) {
+  if (!envConfig.DEEPINFRA_API_KEY) {
     throw new Error(
       "DEEPINFRA_API_KEY environment variable is not configured"
     );
   }
 
   return createOpenAI({
-    apiKey: envConfig.OPENROUTER_API_KEY,
+    apiKey: envConfig.DEEPINFRA_API_KEY,
     baseURL: "https://api.deepinfra.com/v1/openai",
   });
 }
 
 export function isConfigured(): boolean {
-  return !!envConfig.OPENROUTER_API_KEY;
+  return !!envConfig.DEEPINFRA_API_KEY;
 }
 
 export function hasGitHubToken(): boolean {
