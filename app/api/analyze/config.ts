@@ -1,8 +1,8 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { EnvConfig } from "./types";
 
-// Using Llama 3.3 70B on DeepInfra
-export const MODEL_ID = "meta-llama/Llama-3.3-70B-Instruct";
+// Using Llama 3.3 70B on DeepInfra as default, but allowing override via ENV
+export const MODEL_ID = process.env.DEEPINFRA_MODEL_ID || "meta-llama/Llama-3.3-70B-Instruct";
 
 export const AI_CONFIG = {
   temperature: 0.7,
