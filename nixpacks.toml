@@ -7,7 +7,7 @@ cmds = ["pnpm install"]
 
 [phases.build]
 dependsOn = ["install"]
-cmds = ["npx prisma generate", "pnpm run build"]
+cmds = ["pnpm exec prisma generate", "pnpm run build"]
 
 [start]
 cmd = "pnpm start"
