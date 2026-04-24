@@ -6,33 +6,37 @@ import { prisma } from "@/lib/prisma";
 
 const isBuild = process.env.NEXT_PHASE === "phase-production-build";
 
-if (!isBuild) {
-  if (!process.env.AUTH_GITHUB_ID || !process.env.AUTH_GITHUB_SECRET) {
-    throw new Error(
-      "Missing GitHub OAuth environment variables (AUTH_GITHUB_ID, AUTH_GITHUB_SECRET). Please check your .env file.",
-    );
-  }
+const hasGitHubOAuth = !!process.env.AUTH_GITHUB_ID && !!process.env.AUTH_GITHUB_SECRET;
+const hasGoogleOAuth = !!process.env.AUTH_GOOGLE_ID && !!process.env.AUTH_GOOGLE_SECRET;
 
-  if (!process.env.AUTH_GOOGLE_ID || !process.env.AUTH_GOOGLE_SECRET) {
-    throw new Error(
-      "Missing Google OAuth environment variables (AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET). Please check your .env file.",
-    );
-  }
+if (!isBuild && !hasGitHubOAuth) {
+  console.warn("⚠️  Missing GitHub OAuth environment variables (AUTH_GITHUB_ID, AUTH_GITHUB_SECRET). GitHub login will be disabled.");
+}
+
+if (!isBuild && !hasGoogleOAuth) {
+  console.warn("⚠️  Missing Google OAuth environment variables (AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET). Google login will be disabled.");
+}
+
+const providers = [];
+
+if (hasGitHubOAuth || isBuild) {
+  providers.push(GitHub({
+    clientId: process.env.AUTH_GITHUB_ID || (isBuild ? "build" : ""),
+    clientSecret: process.env.AUTH_GITHUB_SECRET || (isBuild ? "build" : ""),
+  }));
+}
+
+if (hasGoogleOAuth || isBuild) {
+  providers.push(Google({
+    clientId: process.env.AUTH_GOOGLE_ID || (isBuild ? "build" : ""),
+    clientSecret: process.env.AUTH_GOOGLE_SECRET || (isBuild ? "build" : ""),
+  }));
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   adapter: PrismaAdapter(prisma),
-  providers: [
-    GitHub({
-      clientId: process.env.AUTH_GITHUB_ID || (isBuild ? "build" : ""),
-      clientSecret: process.env.AUTH_GITHUB_SECRET || (isBuild ? "build" : ""),
-    }),
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID || (isBuild ? "build" : ""),
-      clientSecret: process.env.AUTH_GOOGLE_SECRET || (isBuild ? "build" : ""),
-    }),
-  ],
+  providers,
   pages: {
     signIn: "/login",
   },
